@@ -234,9 +234,15 @@ def status():
     for symbol, asset in assets.items():
         output[symbol] = {
             "type": asset["type"],
-            "price": asset["price"],
-            "signal": asset["signal"],
-            "error": asset["error"]
+"price": asset["price"],
+"signal": asset["signal"],
+"news_sentiment": asset.get("news_sentiment", "UNKNOWN"),
+"news_score": asset.get("news_score", 0),
+"headlines": asset.get("headlines", []),
+"error": asset["error"]
+            
+            
+            
         }
 
     return jsonify({
