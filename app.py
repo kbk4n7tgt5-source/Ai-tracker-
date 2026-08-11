@@ -45,7 +45,83 @@ assets = {
 }
 
 signals = []
+def get_news_sentiment(symbol, asset_type):
+    if not ALPHA_VANTAGE_KEY:
+        return {
+            "sentiment": "UNKNOWN",
+            "score": 0,
+            "headlines": []
+        }
 
+    if asset_type == "crypto":
+        ticker = symbol.split("-")[0]
+        params = {
+            "function": "NEWS_SENTIMENT",
+            "blockchain": ticker,
+            "limit": 20,
+            "apikey": ALPHA_VANTAGE_KEY
+        }
+    else:
+        params = {
+            "function": "NEWS_SENTIMENT",
+            "tickers": symbol,
+            "limit": 20,
+            "apikey": ALPHA_VANTAGE_KEY
+        }
+
+    try:
+        r = requests.get(
+            "https://www.alphavantage.co/query",
+            params=params,
+            timeout=10
+        )
+        r.raise_for_status()
+        data = r.json()
+
+        feed = data.get("feed", [])
+
+        if not feed:
+            return {
+                "sentiment": "NEUTRAL",
+                "score": 0,
+                "headlines": []
+            }
+
+        scores = []
+        headlines = []
+
+        for article in feed[:10]:
+            score = float(article.get("overall_sentiment_score", 0))
+            scores.append(score)
+
+            headlines.append({
+                "title": article.get("title", ""),
+                "source": article.get("source", ""),
+                "score": round(score, 3)
+            })
+
+        avg_score = sum(scores) / len(scores)
+
+        if avg_score >= 0.15:
+            sentiment = "POSITIVE"
+        elif avg_score <= -0.15:
+            sentiment = "NEGATIVE"
+        else:
+            sentiment = "NEUTRAL"
+
+        return {
+            "sentiment": sentiment,
+            "score": round(avg_score, 3),
+            "headlines": headlines[:5]
+        }
+
+    except Exception as exc:
+        return {
+            "sentiment": "UNKNOWN",
+            "score": 0,
+            "headlines": [],
+            "error": str(exc)
+        }
 
 def get_crypto_price(symbol):
     product = symbol.replace("/", "-").upper()
