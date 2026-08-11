@@ -5,7 +5,7 @@ from collections import deque
 from statistics import mean
 import requests
 
-app =app = Flask(__name__, template_folder=".")
+app aapp = Flask(__name__, template_folder=".")
 
 PRODUCT_ID = "BTC-USD"
 FAST_WINDOW = 6
