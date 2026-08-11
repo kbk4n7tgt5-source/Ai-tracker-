@@ -3,6 +3,7 @@ from collections import deque
 from statistics import mean
 from datetime import datetime
 import requests
+import os
 
 app = Flask(__name__, template_folder=".")
 
@@ -10,6 +11,7 @@ FAST_WINDOW = 6
 SLOW_WINDOW = 20
 
 running = False
+ALPHA_VANTAGE_KEY = os.getenv("ALPHA_VANTAGE_KEY")
 
 assets = {
     "BTC-USD": {
