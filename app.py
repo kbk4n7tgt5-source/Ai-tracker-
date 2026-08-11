@@ -196,10 +196,10 @@ def update_asset(symbol, asset):
         asset["price"] = price
         asset["prices"].append(price)
         asset["error"] = ""
-news = get_news_sentiment(symbol, asset["type"])
-asset["news_sentiment"] = news["sentiment"]
-asset["news_score"] = news["score"]
-asset["headlines"] = news["headlines"]
+        news = get_news_sentiment(symbol, asset["type"])
+        asset["news_sentiment"] = news["sentiment"]
+        asset["news_score"] = news["score"]
+        asset["headlines"] = news["headlines"]
         new_signal = calculate_signal(asset)
 
         if new_signal in ("BUY", "SELL") and new_signal != asset["signal"]:
