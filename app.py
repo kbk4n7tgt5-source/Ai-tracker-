@@ -69,7 +69,7 @@ def get_news_sentiment(symbol, asset_type):
             "apikey": ALPHA_VANTAGE_KEY
         }
 print("HAS ALPHA KEY:", bool(ALPHA_VANTAGE_KEY), flush=True)
-    try:
+try:
         r = requests.get(
             "https://www.alphavantage.co/query",
             params=params,
