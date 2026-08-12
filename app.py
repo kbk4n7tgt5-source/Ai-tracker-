@@ -12,7 +12,7 @@ SLOW_WINDOW = 20
 
 running = True
 ALPHA_VANTAGE_KEY = os.getenv("ALPHA_VANTAGE_KEY", "")
-
+print("HAS ALPHA KEY:", bool(ALPHA_VANTAGE_KEY), flush=True)
 assets = {
     "AAPL": {
         "type": "stock",
