@@ -410,7 +410,11 @@ def health():
         "status": "ok"
     })
 
-
+@app.route("/debug-key")
+def debug_key():
+    return jsonify({
+        "alpha_key_loaded": bool(ALPHA_VANTAGE_KEY)
+    })
 if __name__ == "__main__":
     port = int(
         os.environ.get(
