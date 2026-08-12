@@ -77,6 +77,7 @@ def get_news_sentiment(symbol, asset_type):
         )
         r.raise_for_status()
         data = r.json()
+        print("ALPHA VANTAGE RESPONSE:", data)
 
         feed = data.get("feed", [])
 
