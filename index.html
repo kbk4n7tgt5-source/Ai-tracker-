@@ -314,7 +314,74 @@
             </div>
           `;
         }
+const marketNews = document.getElementById("marketNews");
 
+let allHeadlines = [];
+
+for (const [symbol, asset] of Object.entries(data.assets)) {
+    if (asset.headlines && asset.headlines.length) {
+        asset.headlines.forEach(headline => {
+            allHeadlines.push({
+                symbol: symbol,
+                headline: headline
+            });
+        });
+    }
+}
+
+if (!allHeadlines.length) {
+    marketNews.innerHTML = "No market news available yet.";
+} else {
+    marketNews.innerHTML = "";
+
+    allHeadlines.slice(0, 10).forEach(item => {
+        marketNews.innerHTML += `
+            <div class="signal-row">
+                <strong>${item.symbol}</strong><br>
+                ${item.headline}
+            </div>
+        `;
+    });
+}
+const aiMarketView = document.getElementById("aiMarketView");
+
+let strongestAsset = null;
+
+for (const [symbol, asset] of Object.entries(data.assets)) {
+    const newsScore = Number(asset.news_score || 0);
+
+    if (!strongestAsset || Math.abs(newsScore) > Math.abs(strongestAsset.score)) {
+        strongestAsset = {
+            symbol: symbol,
+            score: newsScore,
+            sentiment: asset.news_sentiment || "UNKNOWN",
+            signal: asset.signal || "WAIT"
+        };
+    }
+}
+
+if (!strongestAsset) {
+    aiMarketView.innerHTML = "Waiting for enough market data...";
+} else {
+    let outlook = "NEUTRAL";
+
+    if (strongestAsset.score > 0.15) {
+        outlook = "BULLISH";
+    } else if (strongestAsset.score < -0.15) {
+        outlook = "BEARISH";
+    }
+
+    aiMarketView.innerHTML = `
+        <div class="signal-row">
+            <strong>${strongestAsset.symbol}</strong><br>
+            AI Outlook: ${outlook}<br>
+            News Sentiment: ${strongestAsset.sentiment}<br>
+            Current Signal: ${strongestAsset.signal}<br>
+            Sentiment Score: ${strongestAsset.score.toFixed(2)}
+        </div>
+    `;
+}
+        
         const signals = document.getElementById("signals");
 
         if (!data.signals.length) {
