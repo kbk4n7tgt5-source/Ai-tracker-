@@ -68,7 +68,7 @@ def get_news_sentiment(symbol, asset_type):
             "limit": 20,
             "apikey": ALPHA_VANTAGE_KEY
         }
-
+print("HAS ALPHA KEY:", bool(ALPHA_VANTAGE_KEY), flush=True)
     try:
         r = requests.get(
             "https://www.alphavantage.co/query",
