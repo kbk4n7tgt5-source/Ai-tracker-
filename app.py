@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 import os
 
-app = Flask(__name__, template_folder="templates")
+app = app = Flask(__name__, template_folder=".")
 
 FAST_WINDOW = 6
 SLOW_WINDOW = 20
